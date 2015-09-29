@@ -58,11 +58,11 @@ let watchCommon = (e) => {
             tempCommon.equipMax = body.api_max_slotitem;
 
             tempCommon.battle.win      = body.api_st_win;
-            tempCommon.battle.lose     = body.api_st_lose;
+            tempCommon.battle.count    = body.api_st_win + body.api_st_lose;
             tempCommon.practice.win    = body.api_pt_win;
-            tempCommon.practice.lose   = body.api_pt_lose;
+            tempCommon.practice.count  = body.api_pt_win + body.api_pt_lose;
             tempCommon.mission.success = body.api_ms_success;
-            tempCommon.mission.fail    = body.api_ms_count - body.api_ms_success;
+            tempCommon.mission.count   = body.api_ms_count;
             barek;
         case '/kcsapi/api_get_member/material':
             for(let m in body) {

@@ -59,10 +59,12 @@ let SnapShot = React.createClass({
         this.setState({'data': event.detail.data});
     },
     handleSave: function(event) {
-        if(this.state.data && this.state.selectRecord === 'now') {
-            util.save(window.playedId, this.state.data)
+        let self = this;
+        if(self.state.data && self.state.selectRecord === 'now') {
+            util.save(window.playedId, self.state.data)
             .then((filename) => {
                 console.log(`${filename} save success`);
+                self.handleScan();
             })
             .catch((err) => {
                 console.log(err);
