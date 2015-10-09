@@ -1,10 +1,13 @@
+'use strict'
 let fs   = require('fs-extra'),
     path = require('path'),
     glob = require('glob'),
-    ipc  = reuqire('ipc'),
-    parser = reuqire('./parser'),
-    borwserWindow = require('browser-window');
+    ipc  = require('ipc'),
+    parser = require('./parser'),
+    remote = require('remote'),
+    borwserWindow = remote.require('browser-window');
 
+let mainWindow = borwserWindow.getAllWindows()[0];
 let formatTime = (time) => {
     return `${time.getFullYear()}-${time.getMonth()+1}-${time.getDate()} ${time.getHours()}:${time.getMinutes()}`;
 };
@@ -80,9 +83,9 @@ module.exports = {
         });
     },
     getNow: () => {
-        borwserWindow.send('get-snapshot');
+        mainWindow.send('get-snapshot');
     },
     start: () => {
-        borwserWindow.send('start-snapshot');
+        mainWindow.send('start-snapshot');
     }
 };

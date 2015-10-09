@@ -1,3 +1,4 @@
+'use strict'
 let React          = window.React,
     ReactBootstrap = window.ReactBootstrap,
     Table          = ReactBootstrap.Table;
@@ -18,7 +19,7 @@ let ShipRow = React.createClass({
                 <td>{ship.antiair.now}({ship.antiair.max})</td>
                 <td>{ship.armor.now}({ship.armor.max})</td>
                 <td>{ship.lucky.now}({ship.lucky.max})</td>
-                <td>{ship.lock.now}</td>
+                <td>{ship.locked}</td>
             </tr>
         );
     }
@@ -58,4 +59,4 @@ let SnapshotShips = React.createClass({
     }
 });
 
-module.export = SnapshotShips;
+module.exports = SnapshotShips;

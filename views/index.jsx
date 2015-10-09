@@ -1,8 +1,11 @@
+'use strict'
 let React          = window.React,
     ReactBootstrap = window.ReactBootstrap,
     TabbedArea     = ReactBootstrap.TabbedArea,
     TabPane        = ReactBootstrap.TabPane,
-    DropdownButton = ReactBootstrap.DropdownButton;
+    DropdownButton = ReactBootstrap.DropdownButton,
+    Button         = ReactBootstrap.Button,
+    ButtonGroup    = ReactBootstrap.ButtonGroup;
 
 let util = require('../libs/util');
 let SnapshotShips = require('./ships'),
@@ -16,7 +19,15 @@ let SnapShot = React.createClass({
             'selectRecord': 'now',
             'selectTab'   : 'fleet',
             'records'     : [],
-            'data'        : null
+            'data'        : {
+                'ship'  :[],
+                'equip' :{},
+                'common':{
+                    'battle'  : { },
+                    'practice': { },
+                    'mission' : { },
+                }
+            }
         };
     },
     handleSelect: function(key) {
@@ -107,7 +118,7 @@ let SnapShot = React.createClass({
                         <SnapshotEquips data={this.state.data.equip} />
                     </TabPane>
                     <TabPane key={'statistics'} eventKey={3} tab={'Statistics'} id={'Statistics'} className='poi-app-tabpane'>
-                        <StatisticArea data={this.state.data} />
+                        <StatisticsArea data={this.state.data} />
                     </TabPane>
                 </TabbedArea>
             </div>

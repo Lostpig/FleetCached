@@ -1,3 +1,4 @@
+'use strict'
 let React          = window.React,
     ReactBootstrap = window.ReactBootstrap,
     Table          = ReactBootstrap.Table;
@@ -29,8 +30,8 @@ let SnapshotEquips = React.createClass({
         let equips = this.props.data,
             rows = [];
         for(let i = 0; i < equips.length; i++) {
-            let equips = equips[i];
-            rows.push(<EquipRow equip={equips} index={i+1} />);
+            let equip = equips[i];
+            rows.push(<EquipRow equip={equip} index={i+1} />);
         }
         return (
             <div class="snapshot-ships">
@@ -52,4 +53,4 @@ let SnapshotEquips = React.createClass({
     }
 });
 
-module.export = SnapshotEquips;
+module.exports = SnapshotEquips;

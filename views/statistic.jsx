@@ -1,6 +1,10 @@
+'use strict'
 let React          = window.React,
     ReactBootstrap = window.ReactBootstrap,
-    Panel          = ReactBootstrap.Panel;
+    Panel          = ReactBootstrap.Panel,
+    Table          = ReactBootstrap.Table,
+    ListGroup      = ReactBootstrap.ListGroup,
+    ListGroupItem  = ReactBootstrap.ListGroupItem;
 
 let StatisticArea = React.createClass({
     render: function() {
@@ -10,7 +14,7 @@ let StatisticArea = React.createClass({
                             .sort((a,b) => { return b.level - a.level; }),
             sumLevel = 0, avgLevel = 0;
         lockedShips.forEach(item => sumLevel += item.level);
-        avgLevel = (sumLevel/lockedShips.length).Fixed(1);
+        avgLevel = sumLevel > 0 ? (sumLevel/lockedShips.length).toFixed(1) : '0.0';
 
         return (<div>
             <ListGroup>
@@ -56,3 +60,5 @@ let StatisticArea = React.createClass({
          </div>);
     }
 });
+
+module.exports = StatisticArea;

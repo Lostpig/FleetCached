@@ -1,10 +1,6 @@
+'use strict'
 let ipc = require('ipc');
 
-let React          = window.React,
-    ReactBootstrap = React.ReactBootstrap,
-    FontAwesome    = React.FontAwesome;
-
-let Button = ReactBootstrap.Button;
 let remote = require('remote');
 let windowManager = remote.require('./lib/window');
 
@@ -35,6 +31,7 @@ let boot = () => {
     SnapShotWindow.webContents.on( 'dom-ready', (e) => {
         SnapShotWindow.show();
     });
+    SnapShotWindow.openDevTools({ detach: true });
 };
 
 let materials = ['fuel', 'bullet','steel','bauxite',
@@ -63,7 +60,7 @@ let watchCommon = (e) => {
             tempCommon.practice.count  = body.api_pt_win + body.api_pt_lose;
             tempCommon.mission.success = body.api_ms_success;
             tempCommon.mission.count   = body.api_ms_count;
-            barek;
+            break;
         case '/kcsapi/api_get_member/material':
             for(let m in body) {
                 let val = body[m];
@@ -71,6 +68,7 @@ let watchCommon = (e) => {
                 tempCommon.material[materials[m]] = val;
             }
             break;
+        default: break;
     }
 };
 
@@ -100,11 +98,11 @@ module.exports = {
     'name'       : 'SnapShot',
     'priority'   : 50,
     'realClose'  : true,
-    'displayName': <span><FontAwesome name='ship' key={0} />{' ' + __('Ship Girls Info')}</span>,
+    'displayName': 'ShipSnapShot',
     'author'     : 'Lostpig',
     'link'       : 'https://github.com/Lostpig',
     'version'    : '0.1.0',
-    'description': __('Show detailed information of all owned ship girls'),
+    'description': 'SnapShot',
     'handleClick': function() {
         boot();
     }
