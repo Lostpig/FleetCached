@@ -1,10 +1,10 @@
-'use strict'
+'use strict';
 let ipc = require('ipc');
 
 let remote = require('remote');
 let windowManager = remote.require('./lib/window');
 
-let i18n = require('./node_modules/i18n');
+let i18n = require('i18n');
 let path = require('path-extra');
 let __   = i18n.__;
 
@@ -28,7 +28,7 @@ let boot = () => {
         height   : 650
     });
     SnapShotWindow.loadUrl('file://' + __dirname + '/index.html');
-    SnapShotWindow.webContents.on( 'dom-ready', (e) => {
+    SnapShotWindow.webContents.on('dom-ready', (e) => {
         SnapShotWindow.show();
     });
     SnapShotWindow.openDevTools({ detach: true });
@@ -62,10 +62,50 @@ let watchCommon = (e) => {
             tempCommon.mission.count   = body.api_ms_count;
             break;
         case '/kcsapi/api_get_member/material':
-            for(let m in body) {
-                let val = body[m];
-                if(typeof m === 'string') { m = parseInt(m.slice(1,2)); }
-                tempCommon.material[materials[m]] = val;
+            for(let e in body) {
+                let id = body[e].api_id - 1;
+                tempCommon.material[materials[id]] = body[e].api_value;
+            }
+            break;
+        case '/kcsapi/api_port/port':
+            for(let e in body.api_material) {
+                let id = body.api_material[e].api_id - 1;
+                tempCommon.material[materials[id]] = body.api_material[e].api_value;
+            }
+            break;
+        case '/kcsapi/api_req_hokyu/charge':
+        case '/kcsapi/api_req_kousyou/destroyship':
+            for(let i = 0; i < 4; i++) {
+                tempCommon.material[materials[i]] = body.api_material[i];
+            }
+            break;
+        case '/kcsapi/api_req_kousyou/createitem':
+            for(let i = 0; i < 8; i++) {
+                tempCommon.material[materials[i]] = body.api_material[i];
+            }
+        case '/kcsapi/api_req_kousyou/createship_speedchange':
+            if (body.api_result === 1) {
+                tempCommon.material[materials[4]] -= 1;
+            }
+            break;
+        case '/kcsapi/api_req_kousyou/destroyitem2':
+            for(let i = 0; i < 4; i++) {
+                tempCommon.material[materials[i]] = body.api_get_material[i];
+            }
+            break;
+        case '/kcsapi/api_req_kousyou/remodel_slot':
+            for(let i = 0; i < 8; i++) {
+                tempCommon.material[materials[i]] = body.api_after_material[i];
+            }
+            break;
+        case '/kcsapi/api_req_nyukyo/speedchange':
+            if (body.api_result === 1) {
+                material[5] -= 1;
+            }
+            break;
+        case '/kcsapi/api_req_nyukyo/start':
+            if (body.api_highspeed === 1) {
+                material[5] -= 1;
             }
             break;
         default: break;
@@ -88,8 +128,12 @@ if (config.get('plugin.SnapShot.enable', true)) {
     });
     ipc.on('start-snapshot', () => {
         if(!SnapShotWindow) { return; }
-        let playerId = window._nickNameId;
-        SnapShotWindow.webContents.send('start-snapshot', playerId);
+        let startInfo = {
+            playerId: window._nickNameId,
+            language: window.config.get('poi.language', 'zhCN'),
+            theme   : window.config.get('poi.theme', '__default__')
+        };
+        SnapShotWindow.webContents.send('start-snapshot', startInfo);
     });
     window.addEventListener('game.response', watchCommon);
 }
@@ -98,7 +142,7 @@ module.exports = {
     'name'       : 'SnapShot',
     'priority'   : 50,
     'realClose'  : true,
-    'displayName': 'ShipSnapShot',
+    'displayName': __('Kantai Snapshot'),
     'author'     : 'Lostpig',
     'link'       : 'https://github.com/Lostpig',
     'version'    : '0.1.0',

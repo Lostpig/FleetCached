@@ -5,7 +5,7 @@
     "main": "plugin.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "jsx views_dev/ views/ -x jsx"
+        "build": "jsx jsxs/ views/ -x jsx"
     },
     "repository": {
         "type": "git",

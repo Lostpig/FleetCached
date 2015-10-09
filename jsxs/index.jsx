@@ -1,9 +1,10 @@
-'use strict'
+'use strict';
 let React          = window.React,
     ReactBootstrap = window.ReactBootstrap,
     TabbedArea     = ReactBootstrap.TabbedArea,
     TabPane        = ReactBootstrap.TabPane,
     DropdownButton = ReactBootstrap.DropdownButton,
+    MenuItem       = ReactBootstrap.MenuItem,
     Button         = ReactBootstrap.Button,
     ButtonGroup    = ReactBootstrap.ButtonGroup;
 
@@ -13,6 +14,15 @@ let SnapshotShips = require('./ships'),
     StatisticsArea = require('./statistic');
 
 let records = [];
+
+let formatRecord = (timeStr) => {
+    if(timeStr === 'now') { return 'NOW'; }
+    else {
+        let time = new Date(parseInt(timeStr));
+        return `${time.getFullYear()}-${time.getMonth()+1}-${time.getDate()} ${time.getHours()}:${time.getMinutes()}`;
+    }
+};
+
 let SnapShot = React.createClass({
     getInitialState: function() {
         return {
@@ -20,9 +30,9 @@ let SnapShot = React.createClass({
             'selectTab'   : 'fleet',
             'records'     : [],
             'data'        : {
-                'ship'  :[],
-                'equip' :{},
-                'common':{
+                'ship'  : [],
+                'equip' : {},
+                'common': {
                     'battle'  : { },
                     'practice': { },
                     'mission' : { },
@@ -57,7 +67,7 @@ let SnapShot = React.createClass({
             util.getNow();
         }
         else {
-            util.load(window.playerId, key)
+            util.load(window.playerId, self.state.selectRecord)
             .then((data) => {
                 this.setState({'data': data});
             })
@@ -72,7 +82,7 @@ let SnapShot = React.createClass({
     handleSave: function(event) {
         let self = this;
         if(self.state.data && self.state.selectRecord === 'now') {
-            util.save(window.playedId, self.state.data)
+            util.save(window.playerId, self.state.data)
             .then((filename) => {
                 console.log(`${filename} save success`);
                 self.handleScan();
@@ -90,14 +100,14 @@ let SnapShot = React.createClass({
     },
     render: function() {
         return (
-            <div>
+            <div id="snapshot-content">
                 <div>
-                    <DropdownButton tab={this.state.selectRecord}>
-                        <div key={'now'} eventKey={0} tab={'NOW'} id={'now'} onClick={this.handleChange} />
+                    <DropdownButton title={formatRecord(this.state.selectRecord)}>
+                        <MenuItem key={0} eventKey={'now'} onSelect={this.handleChange}>Now</MenuItem>
                         {
                             this.state.records.map((record, index) => {
                                 return (
-                                    <div key={record.filename} eventKey={index+1} tab={record.time} id={record.filename} onClick={this.handleChange} />
+                                    <MenuItem key={index+1} eventKey={record.filename} onSelect={this.handleChange}>{record.time}</MenuItem>
                                 );
                             })
                         }

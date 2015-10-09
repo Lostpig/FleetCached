@@ -1,10 +1,10 @@
-'use strict'
-let fs   = require('fs-extra'),
-    path = require('path'),
-    glob = require('glob'),
-    ipc  = require('ipc'),
-    parser = require('./parser'),
-    remote = require('remote'),
+'use strict';
+let fs            = require('fs-extra'),
+    path          = require('path'),
+    glob          = require('glob'),
+    ipc           = require('ipc'),
+    parser        = require('./parser'),
+    remote        = require('remote'),
     borwserWindow = remote.require('browser-window');
 
 let mainWindow = borwserWindow.getAllWindows()[0];
@@ -12,9 +12,9 @@ let formatTime = (time) => {
     return `${time.getFullYear()}-${time.getMonth()+1}-${time.getDate()} ${time.getHours()}:${time.getMinutes()}`;
 };
 
+window.remote = remote;
+
 ipc.on('set-snapshot', (snapData) => {
-
-
     let event = new CustomEvent('Shoted', {
         bubbles   : true,
         cancelable: true,
@@ -24,11 +24,11 @@ ipc.on('set-snapshot', (snapData) => {
     });
     window.dispatchEvent(event);
 });
-ipc.on('start-snapshot', (playerId) => {
-    window.playerId = playerId;
+ipc.on('start-snapshot', (startInfo) => {
     window.dispatchEvent(new CustomEvent('snapshot-start', {
         bubbles   : true,
-        cancelable: true
+        cancelable: true,
+        detail    : startInfo
     }));
 });
 
@@ -41,9 +41,8 @@ module.exports = {
         let savePath = path.join(saveDir, data.saveTime + '.json');
         return new Promise((resolve, reject) => {
             try {
-                fs.ensureDirSync(savePath);
-
-                fs.writeJsonSync(filename, data);
+                fs.ensureDirSync(saveDir);
+                fs.writeJsonSync(savePath, data);
                 resolve(`${time}.json`);
             }
             catch(err) {
@@ -52,6 +51,7 @@ module.exports = {
         });
     },
     load: (playerId, fileName) => {
+        fileName = fileName + '.json';
         let loadPath = path.join(APPDATA_PATH, 'KanSanpshot', playerId, fileName);
         return new Promise((resolve, reject) => {
             try {
@@ -72,10 +72,10 @@ module.exports = {
             try {
                 let files = glob.sync(saveDir);
                 let records = files.map((file) => {
-                    let time = file.split('.')[0];
-                    return { filename: file, time: formatTime(new Date(time)) };
+                    let time = parseInt(path.parse(file).name);
+                    return { filename: time, time: formatTime(new Date(time)) };
                 });
-                return records;
+                resolve(records);
             }
             catch(err) {
                 reject(err);

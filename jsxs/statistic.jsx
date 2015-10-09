@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 let React          = window.React,
     ReactBootstrap = window.ReactBootstrap,
     Panel          = ReactBootstrap.Panel,

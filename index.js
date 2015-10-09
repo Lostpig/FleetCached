@@ -1,8 +1,20 @@
 'use strict';
-//require('react');
-let i18n = require('i18n'),
+
+let
+    i18n = require('i18n'),
     path = require('path-extra'),
     util = require('./libs/util');
+
+window.React          = require('../../node_modules/react');
+window.ReactBootstrap = require('../../node_modules/react-bootstrap');
+window.FontAwesome    = require('../../node_modules/react-fontawesome');
+
+window.$  = (param) => { return document.querySelector(param); };
+window.$$ = (param) => { return document.querySelectorAll(param); };
+
+window.ROOT         = path.join(__dirname, '../..');
+window.EXROOT       = remote.getGlobal('EXROOT');
+window.APPDATA_PATH = remote.getGlobal('APPDATA_PATH');
 
 i18n.configure({
     locales      : ['en-US', 'ja-JP', 'zh-CN', 'zh-TW'],
@@ -12,19 +24,22 @@ i18n.configure({
     indent       : '\t',
     extension    : '.json'
 });
-
-window.language = 'zhCN'; //config.get('poi.language', navigator.language);
-i18n.setLocale(window.language);
 window.__ = i18n.__;
 
-window.React = require('../../node_modules/react');
-window.ReactBootstrap = require('../../node_modules/react-bootstrap');
-window.FontAwesome = require('../../node_modules/react-fontawesome');
+let start = (event) => {
+    let startInfo = event.detail;
+    window.playerId = startInfo.playerId;
+    window.language = startInfo.language;
+    i18n.setLocale(window.language);
 
-window.$ = (param) => { return document.querySelector(param); };
-window.$$ = (param) => { return document.querySelectorAll(param); };
+    window.theme = startInfo.theme;
+    if (window.theme === '__default__') {
+        $('#bootstrap-css').setAttribute('href', `file://${ROOT}/components/bootstrap/dist/css/bootstrap.css`);
+    }
+    else {
+        $('#bootstrap-css').setAttribute('href', `file://${ROOT}/assets/themes/${theme}/css/${theme}.css`);
+    }
 
-let start = () => {
     window.removeEventListener('snapshot-start', start);
     require('./views/index');
 };

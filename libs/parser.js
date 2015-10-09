@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 let
 parseShip = (ships, $ships, $shipTypes) => {
     let arr = [];
@@ -50,34 +51,41 @@ parseShip = (ships, $ships, $shipTypes) => {
 },
 parseEquips = (slotitems, $slotitems, $slotitemTypes) => {
     let equipMap = {};
-    for(let i = 0, l = slotitems.length; i < l; i++) {
-        let equip = slotitems[i],
-            equipInfo = $slotitems[equip.api_slotitem_id]; equip.api_slotitem_id.toString();
-        if (!equipMap[equipInfo.api_id.toString()]) {
-            equipMap[equipInfo.api_id.toString()] = {
+    let itemInfos = [], itemTypes = [];
+    for (let index = 0; index < $slotitems.length; index++) {
+        itemInfos[$slotitems[index].api_id] = $slotitems[index];
+    }
+    for (let index = 0; index < $slotitemTypes.length; index++) {
+        itemTypes[$slotitemTypes[index].api_id] = $slotitemTypes[index];
+    }
+
+    for(let id in slotitems) {
+        let equip = slotitems[id],
+            equipInfo = itemInfos[equip.api_slotitem_id],
+            apiId = equipInfo.api_id.toString();
+
+        if(!equipMap[apiId]) {
+            equipMap[apiId] = {
                 id      : equipInfo.api_id,
                 name    : equipInfo.api_name,
                 type    : equipInfo.api_type[3],
-                typename: slotitemTypes[equipInfo.api_type[3]].api_name,
+                typename: itemTypes[equipInfo.api_type[3]].api_name,
                 count   : 0,
                 star    : [0,0,0,0,0,0,0,0,0,0,0]
             };
         }
-        equipMap[equipId].count++;
+
+        equipMap[apiId].count++;
         if(typeof equip.api_level === 'number' && equip.api_level > 0) {
-            equipMap[equipId].star[equip.api_level]++;
+            equipMap[apiId].star[equip.api_level]++;
         }
     }
     return equipMap;
 },
 parseCommon = (data) => {
     let common = data._common;
-    common.shipCount = data._ships.length;
-    common.equipCount = data._slotitems.length;
-
     return common;
 };
-
 
 module.exports = (data) => {
     return {
