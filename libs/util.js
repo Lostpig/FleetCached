@@ -50,8 +50,8 @@ module.exports = {
             }
         });
     },
-    load: (playerId, fileName) => {
-        fileName = fileName + '.json';
+    load: (playerId, recordId) => {
+        let fileName = recordId + '.json';
         let loadPath = path.join(APPDATA_PATH, 'KanSanpshot', playerId, fileName);
         return new Promise((resolve, reject) => {
             try {
@@ -59,7 +59,7 @@ module.exports = {
                 if (fs.existsSync(loadPath)) {
                     data = fs.readJsonSync(loadPath);
                 }
-                resolve(data);
+                resolve(data, recordId);
             }
             catch(err) {
                 reject(err);

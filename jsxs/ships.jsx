@@ -3,6 +3,8 @@ let React          = window.React,
     ReactBootstrap = window.ReactBootstrap,
     Table          = ReactBootstrap.Table;
 
+let __ = window.__;
+
 let ShipRow = React.createClass({
     render: function() {
         let ship = this.props.ship;
@@ -29,27 +31,31 @@ let SnapshotShips = React.createClass({
     render: function() {
         let ships = this.props.data,
             rows = [];
+        if (ships === null) {
+            return (<div className="nodata-alert">{__('No data available')}</div>);
+        }
+
         for(let i = 0; i < ships.length; i++) {
             let ship = ships[i];
-            rows.push(<ShipRow ship={ship} index={i+1} />);
+            rows.push(<ShipRow key={i+1} ship={ship} index={i+1} />);
         }
         return (
             <div class="snapshot-ships">
-                <Table striped condensed hover>
+                <Table striped bordered condensed>
                     <thead>
                         <tr>
-                            <th>NO</th>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Level</th>
-                            <th>Health</th>
-                            <th>Fire</th>
-                            <th>Torpedo</th>
-                            <th>Antiair</th>
-                            <th>Armor</th>
-                            <th>Luck</th>
-                            <th>Lock</th>
+                            <th>{__('NO')}</th>
+                            <th>{__('ID')}</th>
+                            <th>{__('Name')}</th>
+                            <th>{__('Type')}</th>
+                            <th>{__('Level')}</th>
+                            <th>{__('Health')}</th>
+                            <th>{__('Fire')}</th>
+                            <th>{__('Torpedo')}</th>
+                            <th>{__('Antiair')}</th>
+                            <th>{__('Armor')}</th>
+                            <th>{__('Luck')}</th>
+                            <th>{__('Lock')}</th>
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>

@@ -6,38 +6,30 @@ let React          = window.React,
     DropdownButton = ReactBootstrap.DropdownButton,
     MenuItem       = ReactBootstrap.MenuItem,
     Button         = ReactBootstrap.Button,
-    ButtonGroup    = ReactBootstrap.ButtonGroup;
+    ButtonGroup    = ReactBootstrap.ButtonGroup,
+    ButtonToolbar  = ReactBootstrap.ButtonToolbar;
 
+let __ = window.__;
 let util = require('../libs/util');
 let SnapshotShips = require('./ships'),
     SnapshotEquips = require('./equips'),
     StatisticsArea = require('./statistic');
 
-let records = [];
-
 let formatRecord = (timeStr) => {
-    if(timeStr === 'now') { return 'NOW'; }
+    if(timeStr === 'now') { return __('Now'); }
     else {
         let time = new Date(parseInt(timeStr));
         return `${time.getFullYear()}-${time.getMonth()+1}-${time.getDate()} ${time.getHours()}:${time.getMinutes()}`;
     }
 };
 
+let nowRecord = {};
 let SnapShot = React.createClass({
     getInitialState: function() {
         return {
             'selectRecord': 'now',
-            'selectTab'   : 'fleet',
-            'records'     : [],
-            'data'        : {
-                'ship'  : [],
-                'equip' : {},
-                'common': {
-                    'battle'  : { },
-                    'practice': { },
-                    'mission' : { },
-                }
-            }
+            'selectTab'   : 3,
+            'records'     : []
         };
     },
     handleSelect: function(key) {
@@ -46,43 +38,47 @@ let SnapShot = React.createClass({
         }
     },
     handleChange: function(key) {
-        if(key !== this.state.selectRecord) {
-            this.setState({'selectRecord': key});
+        let self = this;
+        if (key !== self.state.selectRecord) {
+            self.setState({'selectRecord': key});
+            if (key === 'now') {
+                self.setState({'data': nowRecord});
+            }
+            else {
+                util.load(window.playerId, key)
+                    .then((data, recordId) => {
+                        self.setState({'data': data});
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
         }
     },
     handleScan: function() {
         let self = this;
         util.scan(window.playerId)
         .then((items) => {
-            records = items;
+            let records = items;
             self.setState({'records': records});
         })
         .catch((err) => {
             console.log(err);
         });
     },
-    handleLoad: function(key) {
-        let self = this;
-        if(self.state.selectRecord === 'now') {
-            util.getNow();
-        }
-        else {
-            util.load(window.playerId, self.state.selectRecord)
-            .then((data) => {
-                this.setState({'data': data});
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        }
+    handleLoad: function() {
+        console.log('go load');
+        util.getNow();
     },
     handleLoaded: function(event) {
-        this.setState({'data': event.detail.data});
+        nowRecord = event.detail.data;
+        if (this.state.selectRecord === 'now') {
+            this.setState({'data': nowRecord});
+        }
     },
     handleSave: function(event) {
         let self = this;
-        if(self.state.data && self.state.selectRecord === 'now') {
-            util.save(window.playerId, self.state.data)
+        util.save(window.playerId, nowRecord)
             .then((filename) => {
                 console.log(`${filename} save success`);
                 self.handleScan();
@@ -90,10 +86,11 @@ let SnapShot = React.createClass({
             .catch((err) => {
                 console.log(err);
             });
-        }
     },
     componentDidMount: function() {
         window.addEventListener('Shoted', this.handleLoaded);
+        this.handleScan();
+        this.handleLoad();
     },
     componentWillUnmount: function() {
         window.removeEventListener('game.response', this.handleLoaded);
@@ -101,9 +98,9 @@ let SnapShot = React.createClass({
     render: function() {
         return (
             <div id="snapshot-content">
-                <div>
-                    <DropdownButton title={formatRecord(this.state.selectRecord)}>
-                        <MenuItem key={0} eventKey={'now'} onSelect={this.handleChange}>Now</MenuItem>
+                <ButtonToolbar>
+                    <DropdownButton title={formatRecord(this.state.selectRecord)} className="record-select">
+                        <MenuItem key={0} eventKey={'now'} onSelect={this.handleChange} bsSize='lg'>{__('Now')}</MenuItem>
                         {
                             this.state.records.map((record, index) => {
                                 return (
@@ -112,23 +109,19 @@ let SnapShot = React.createClass({
                             })
                         }
                     </DropdownButton>
-                    <ButtonGroup>
-                        <Button onClick={this.handleLoad}>Load</Button>
-                        <Button onClick={this.handleSave} disabled={this.state.selectRecord !== 'now'}>Save</Button>
-                        <Button onClick={this.handleScan}>Scan</Button>
-                    </ButtonGroup>
-                </div>
-                <TabbedArea activeKey={this.state.selectTab} onSelect={this.handleSelect} animation={false}>
-                    <TabPane key={'common'} eventKey={0} tab={'Common'} id={'Common'} className='poi-app-tabpane'>
+                    <Button onClick={this.handleLoad}>{__('Load')}</Button>
+                    <Button onClick={this.handleSave}>{__('Save')}</Button>
+                    <Button onClick={this.handleScan}>{__('Scan')}</Button>
+                </ButtonToolbar>
+                <TabbedArea id="snapshot-tabarea" activeKey={this.state.selectTab} onSelect={this.handleSelect} animation={false}>
+                    <TabPane key={'ship'} eventKey={1} tab={__('Ships')} id={'Ships'} className='poi-app-tabpane'>
+                        <SnapshotShips data={this.state.data ? this.state.data.ship : null} />
                     </TabPane>
-                    <TabPane key={'ship'} eventKey={1} tab={'Ships'} id={'Ships'} className='poi-app-tabpane'>
-                        <SnapshotShips data={this.state.data.ship} />
+                    <TabPane key={'equip'} eventKey={2} tab={__('Equips')} id={'Equips'} className='poi-app-tabpane'>
+                        <SnapshotEquips data={this.state.data ? this.state.data.equip : null} />
                     </TabPane>
-                    <TabPane key={'equip'} eventKey={2} tab={'Equips'} id={'Equips'} className='poi-app-tabpane'>
-                        <SnapshotEquips data={this.state.data.equip} />
-                    </TabPane>
-                    <TabPane key={'statistics'} eventKey={3} tab={'Statistics'} id={'Statistics'} className='poi-app-tabpane'>
-                        <StatisticsArea data={this.state.data} />
+                    <TabPane key={'statistics'} eventKey={3} tab={__('Statistics')} id={'Statistics'} className='poi-app-tabpane'>
+                        <StatisticsArea data={this.state.data || null} />
                     </TabPane>
                 </TabbedArea>
             </div>

@@ -3,13 +3,15 @@ let React          = window.React,
     ReactBootstrap = window.ReactBootstrap,
     Table          = ReactBootstrap.Table;
 
+let __ = window.__;
+
 let EquipRow = React.createClass({
     render: function() {
         let equip = this.props.equip,
             starText = [];
-        for(let i = 1; i < equip.star; i++) {
+        for(let i = 1; i < equip.star.length; i++) {
             if(equip.star[i] > 0) {
-                starText.push(<span>{i}★ × {equip.star[i]}</span>);
+                starText.push(<span className="equip-star">{i}★ × {equip.star[i]}</span>);
             }
         }
         return (
@@ -28,24 +30,26 @@ let EquipRow = React.createClass({
 let SnapshotEquips = React.createClass({
     render: function() {
         let equips = this.props.data,
-            rows = [],
-            index = 1;
-        for(let id in equips) {
-            let equip = equips[id];
-            rows.push(<EquipRow equip={equip} index={index} />);
-            index++;
+            rows = [];
+        if (equips === null) {
+            return (<div className="nodata-alert">{__('No data available')}</div>);
+        }
+
+        for(let i = 0; i < equips.length; i++) {
+            let equip = equips[i];
+            rows.push(<EquipRow key={i+1} equip={equip} index={i+1} />);
         }
         return (
             <div class="snapshot-ships">
-                <Table striped condensed hover>
+                <Table striped bordered condensed>
                     <thead>
                         <tr>
-                            <th>NO</th>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Count</th>
-                            <th>Star</th>
+                            <th>{__('NO')}</th>
+                            <th>{__('ID')}</th>
+                            <th>{__('Name')}</th>
+                            <th>{__('Type')}</th>
+                            <th>{__('Count')}</th>
+                            <th>{__('Star')}</th>
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>

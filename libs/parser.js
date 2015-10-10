@@ -50,8 +50,10 @@ parseShip = (ships, $ships, $shipTypes) => {
     return arr;
 },
 parseEquips = (slotitems, $slotitems, $slotitemTypes) => {
-    let equipMap = {};
-    let itemInfos = [], itemTypes = [];
+    let equipMap = {},
+        equipArr = [];
+    let itemInfos = [],
+        itemTypes = [];
     for (let index = 0; index < $slotitems.length; index++) {
         itemInfos[$slotitems[index].api_id] = $slotitems[index];
     }
@@ -80,7 +82,12 @@ parseEquips = (slotitems, $slotitems, $slotitemTypes) => {
             equipMap[apiId].star[equip.api_level]++;
         }
     }
-    return equipMap;
+
+    for(let id in equipMap) {
+        equipArr.push(equipMap[id]);
+    }
+
+    return equipArr;
 },
 parseCommon = (data) => {
     let common = data._common;

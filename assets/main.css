@@ -1,18 +1,26 @@
 *, body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: "Ubuntu", "Helvetica Neue", "Helvetica", "Arial", "Heiti SC", "WenQuanYi Micro Hei", "Microsoft YaHei", sans-serif;
+    font-family: "Ubuntu", "Helvetica Neue", "Helvetica", "Arial", "Heiti SC", "WenQuanYi Micro Hei", "Microsoft YaHei", sans-serif;
 }
-body {
-  margin-top: 15px;
-  font-size: 13px;
-}
+body { margin-top: 15px; font-size: 13px; }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  -webkit-border-radius: 1px;
-}
-::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 1px;
-  background-color: #3d3d3d;
-}
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { -webkit-border-radius: 1px; }
+::-webkit-scrollbar-thumb { -webkit-border-radius: 1px; background-color: #3d3d3d; }
+
+.record-select { min-width: 400px; max-width: 500px; }
+
+#snapshot-content{ }
+#snapshot-content > .btn-toolbar{ display: flex; flex-flow: row nowrap; padding: 0 5px; }
+#snapshot-content > .btn-toolbar > .record-select{ flex:6; }
+    #snapshot-content > .btn-toolbar > .record-select > button { width: 100%; text-align: left; }
+    #snapshot-content > .btn-toolbar > .record-select > ul { width: 100%; }
+#snapshot-content > .btn-toolbar > .btn{ flex:1; }
+#snapshot-content > .btn-toolbar .btn{ margin-top:0; }
+
+#snapshot-content nav > ul.nav-tabs{ display: flex; flex-flow: row nowrap; }
+#snapshot-content nav > ul.nav-tabs > li{ flex:1; text-align: center; }
+
+#snapshot-tabarea{ padding: 5px; }
+
+.equip-star { display: block; }
+.nodata-alert { height: 250px; line-height: 250px; width: 100%; text-align: center; font-size: 2.5em; }

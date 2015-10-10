@@ -1,3 +1,30 @@
 {
     "Kantai Snapshot": "Kantai Snapshot",
+
+    "Save": "Save",
+    "Load": "Load",
+    "Scan": "Scan",
+    "Now": "Now",
+    "Ships": "Ships",
+    "Equips": "Equips",
+    "Statistics": "Statistics",
+
+    "No": "No",
+    "ID": "ID",
+    "SortNo": "SortNo",
+    "Name": "Name",
+    "Type": "Type",
+    "Count": "Count",
+    "Stars": "Stars",
+
+    "Level": "Level",
+    "Health": "Health",
+    "Fire": "Fire",
+    "Torpedo": "Torpedo",
+    "Antiair": "Antiair",
+    "Armor": "Armor",
+    "Luck": "Luck",
+    "Locked": "Locked",
+
+    "No data available": "No data available"
 }

@@ -145,7 +145,7 @@ module.exports = {
     'displayName': __('Kantai Snapshot'),
     'author'     : 'Lostpig',
     'link'       : 'https://github.com/Lostpig',
-    'version'    : '0.1.0',
+    'version'    : '0.1.8',
     'description': 'SnapShot',
     'handleClick': function() {
         boot();
