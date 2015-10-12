@@ -42,6 +42,7 @@ let SnapshotShips = React.createClass({
         return (
             <div class="snapshot-ships">
                 <Table striped bordered condensed>
+                    <caption>{__('Ships Info')}</caption>
                     <thead>
                         <tr>
                             <th>{__('NO')}</th>

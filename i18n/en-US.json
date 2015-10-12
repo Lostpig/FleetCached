@@ -9,6 +9,7 @@
     "Equips": "Equips",
     "Statistics": "Statistics",
 
+    "Equips Info": "Equips Info",
     "No": "No",
     "ID": "ID",
     "SortNo": "SortNo",
@@ -17,6 +18,7 @@
     "Count": "Count",
     "Stars": "Stars",
 
+    "Ships Info": "Ships Info",
     "Level": "Level",
     "Health": "Health",
     "Fire": "Fire",
@@ -25,6 +27,20 @@
     "Armor": "Armor",
     "Luck": "Luck",
     "Locked": "Locked",
+
+    "Teitokun Common Info": "Teitokun Common Info",
+    "ShipCount": "Ship Count",
+    "EquipCount": "Equip Count",
+    "Battle": "Battle",
+    "Practice": "Practice",
+    "Mission": "Mission",
+    "Materials": "Materials",
+    "Ships Statistics": "Ships Statistics",
+    "Locked": "Locked",
+    "AvgLevel": "Avg Level",
+    "Max Level Ship": "Max Level Ship",
+    "Each ShipType Statistic": "Each ShipType Statistic",
+    "MainForce": "Main Force",
 
     "No data available": "No data available"
 }

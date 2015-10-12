@@ -8,6 +8,9 @@ let i18n = require('i18n');
 let path = require('path-extra');
 let __   = i18n.__;
 
+let React = window.React,
+    FontAwesome = window.FontAwesome;
+
 i18n.configure({
     'locales'      : ['en-US', 'ja-JP', 'zh-CN', 'zh-TW'],
     'defaultLocale': 'zh-CN',
@@ -142,10 +145,10 @@ module.exports = {
     'name'       : 'SnapShot',
     'priority'   : 50,
     'realClose'  : true,
-    'displayName': __('Kantai Snapshot'),
+    'displayName': React.createElement('span', null, React.createElement(FontAwesome, { 'name': 'tags', 'key': 0. }), ' ' + __('Kantai Snapshot')),
     'author'     : 'Lostpig',
     'link'       : 'https://github.com/Lostpig',
-    'version'    : '0.1.8',
+    'version'    : '0.1.9',
     'description': 'SnapShot',
     'handleClick': function() {
         boot();
