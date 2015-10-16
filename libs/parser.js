@@ -15,7 +15,8 @@ parseShip = (ships, $ships, $shipTypes) => {
         let ship = ships[id];
         let shipinfo = shipInfos[ship.api_ship_id];
         let s_item = {
-            id    : ship.id,
+            id    : ship.api_id,
+            stype : shipinfo.api_stype,
             type  : shipTypes[shipinfo.api_stype].api_name,
             name  : shipinfo.api_name,
             level : ship.api_lv,
@@ -96,8 +97,9 @@ parseCommon = (data) => {
 
 module.exports = (data) => {
     return {
-        ship  : parseShip(data._ships, data.$ships, data.$shipTypes),
-        equip : parseEquips(data._slotitems, data.$slotitems, data.$slotitemTypes),
-        common: parseCommon(data)
+        saveTime: new Date().getTime(),
+        ship    : parseShip(data._ships, data.$ships, data.$shipTypes),
+        equip   : parseEquips(data._slotitems, data.$slotitems, data.$slotitemTypes),
+        common  : parseCommon(data)
     };
 };

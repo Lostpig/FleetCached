@@ -22,5 +22,41 @@ body { margin-top: 15px; font-size: 13px; }
 
 #snapshot-tabarea{ padding: 5px; }
 
+.snapshot-shiptable { }
+.snapshot-shiptable .firepower{ background-color: rgba(245, 93, 93, 0.33); }
+.snapshot-shiptable .torpedo{ background-color: rgba(162, 194, 230, 0.33); }
+.snapshot-shiptable .antiair{ background-color: rgba(255, 176, 77, 0.33); }
+.snapshot-shiptable .armor{ background-color: rgba(255, 219, 79, 0.33); }
+.snapshot-shiptable .lucky{ background-color: rgba(125, 239, 94, 0.33); }
+
+.snapshot-compare { width: 800px; margin:5px auto; }
+.snapshot-compare > .btn-toolbar{ display: flex; flex-flow: row nowrap; padding: 0 5px; }
+.snapshot-compare > .btn-toolbar > .record-select{ flex:1; }
+.snapshot-compare > .btn-toolbar > .record-select > button { width: 100%; text-align: left; }
+.snapshot-compare > .btn-toolbar > .record-select > ul { width: 100%; }
+.snapshot-compare .red{ color: #ff3333; }
+.snapshot-compare .green{ color: #33ff33; }
+.snapshot-compare .normal{ color: #ffff33; }
+
+#snapshot-comparearea{ font-size: 1.1em; }
+.compare-s5 > colgroup{ }
+.compare-s5 > colgroup > col:nth-child(1){ width: 15%; }
+.compare-s5 > colgroup > col:nth-child(2){ width: 45%; }
+.compare-s5 > colgroup > col:nth-child(3){ width:  5%; }
+.compare-s5 > colgroup > col:nth-child(4){ width: 20%; }
+.compare-s5 > colgroup > col:nth-child(5){ width: 15%; }
+.compare-s6 > colgroup{ }
+.compare-s6 > colgroup > col:nth-child(1){ width: 15%; }
+.compare-s6 > colgroup > col:nth-child(2){ width: 25%; }
+.compare-s6 > colgroup > col:nth-child(3){ width: 20%; }
+.compare-s6 > colgroup > col:nth-child(4){ width:  5%; }
+.compare-s6 > colgroup > col:nth-child(5){ width: 20%; }
+.compare-s6 > colgroup > col:nth-child(6){ width: 15%; }
+
+.snapshot-statisticarea{ width: 700px; margin:5px auto; }
+
+.snapshot-tname{ font-size: 18px; margin: 10px; }
+.snapshot-sstitle{ font-size: 18px; }
+.snapshot-trow{ color:#fea059; font-size: 1.1em; }
 .equip-star { display: block; }
 .nodata-alert { height: 250px; line-height: 250px; width: 100%; text-align: center; font-size: 2.5em; }

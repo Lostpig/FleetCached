@@ -2,37 +2,56 @@
 require('../libs/lambdaplus');
 let React          = window.React,
     ReactBootstrap = window.ReactBootstrap,
-    Table          = ReactBootstrap.Table;
+    ListGroup      = ReactBootstrap.ListGroup,
+    ListGroupItem  = ReactBootstrap.ListGroupItem,
+    Table          = ReactBootstrap.Table,
+    Label          = ReactBootstrap.Label,
+    Panel          = ReactBootstrap.Panel;
 
-let getShipsStatistic = (shipdata) => {
-        let lockedShips = shipdata.filter(item => item.locked),
-            forceShips = lockedShips.filter(item => item.level >= 70);
+let shipStatistic = require('../libs/shipStatistic');
+let shipFilterCondition = shipStatistic.FilterCondition,
+    getShipsStatistic = shipStatistic.getShipsStatistic;
 
-        let types = lockedShips
-            .distinct(item => item.type)
-            .map((typeitem) => {
-                let _lockeds = lockedShips.filter(item => item.type === typeitem),
-                    _forces = forceShips.filter(item => item.type === typeitem);
-                return {
-                    'name'       : typeitem,
-                    'lockedCount': _lockeds.length,
-                    'forceCount' : _forces.length,
-                    'lockedAvgLv': _lockeds.avg(item => item.level),
-                    'forceAvgLv' : _forces.avg(item => item.level),
-                    'maxLvShip'  : _lockeds.max(item => item.level)
-                };
-        });
+let ShipStatisticArea = React.createClass({
+    render: function() {
+        if (this.props.data === null) { return ''; }
+        let title = this.props.title,
+            sShip = this.props.data;
 
-        let shipStatistic = {
-            'lockedAvgLv': lockedShips.avg(item => item.level),
-            'lockedCount': lockedShips.length,
-            'forceAvgLv' : forceShips.avg(item => item.level),
-            'forceCount' : forceShips.length,
-            'maxLvShip'  : lockedShips.max(item => item.level),
-            'types'      : types
-        };
-        return shipStatistic;
-    };
+        return (
+            <Panel collapsible defaultExpanded header={<Label className="snapshot-sstitle">{__('Ships Statistics') + ` (${title})`}</Label>}>
+                <ListGroup>
+                    <ListGroupItem>{`${__('ShipCount')} : ${sShip.Count}`}</ListGroupItem>
+                    <ListGroupItem>{`${__('AvgLevel')} : ${sShip.AvgLevel.toFixed(1)}`}</ListGroupItem>
+                    <ListGroupItem>{`${__('Max Level Ship')} : ${sShip.maxLvShip.name} (${sShip.maxLvShip.level})`}</ListGroupItem>
+                </ListGroup>
+                <h5><Label>{__('Each ShipType Statistic')}</Label></h5>
+                <Table striped condensed>
+                    <thead>
+                        <tr>
+                            <td>{__('SType')}</td>
+                            <td>{__('ShipCount')}</td>
+                            <td>{__('AvgLevel')}</td>
+                            <td>{__('Max Level Ship')}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        sShip.Ctypes.map((item) => {
+                            return (<tr key={item.Id}>
+                                <td>{item.Name}</td>
+                                <td>{item.Count}</td>
+                                <td>{item.AvgLevel.toFixed(1)}</td>
+                                <td>{item.maxLvShip ? `${item.maxLvShip.name} (${item.maxLvShip.level})` : ''})</td>
+                            </tr>);
+                        })
+                    }
+                    </tbody>
+                </Table>
+            </Panel>
+        );
+    }
+});
 
 let StatisticArea = React.createClass({
     render: function() {
@@ -45,36 +64,56 @@ let StatisticArea = React.createClass({
             equipCount = 0;
         this.props.data.equip.forEach(item => equipCount += item.count);
 
-        let sShip = getShipsStatistic(this.props.data.ship);
+        let sShips = shipFilterCondition.map((item, index) => {
+            let data = getShipsStatistic(this.props.data.ship, item.filter);
+            return (<ShipStatisticArea key={index + 1} data={data} title={item.title} />);
+        });
 
-        return (<div>
-            <Table striped bordered condensed>
-                <caption>{__('Teitokun Common Info')}</caption>
+        return (<div className="snapshot-statisticarea">
+            <h4><Label>{__('Teitokun Common Info')}</Label></h4>
+            <ListGroup>
+                <ListGroupItem>{common.name + ' ' + __('Level') + '.' + common.level}</ListGroupItem>
+                <ListGroupItem>{__('ShipCount') + ': ' + shipCount + ' / ' + common.shipMax}</ListGroupItem>
+                <ListGroupItem>{__('EquipCount') + ': ' + equipCount + ' / ' + common.equipMax}</ListGroupItem>
+            </ListGroup>
+
+            <h4><Label>{__('Dispatch')}:</Label></h4>
+            <Table condensed>
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td>{__('Battle')}</td>
+                        <td>{__('Practice')}</td>
+                        <td>{__('Mission')}</td>
+                    </tr>
+                </thead>
                 <tbody>
                     <tr>
-                        <td colSpan="2">{common.name}</td>
-                        <td colSpan="2">{__('Level')}.{common.level}</td>
+                        <td>{__('SuccessCount')}</td>
+                        <td>{common.battle.win}</td>
+                        <td>{common.practice.win}</td>
+                        <td>{common.mission.success}</td>
                     </tr>
                     <tr>
-                        <td>{__('ShipCount')}:</td>
-                        <td>{shipCount}/{common.shipMax}</td>
-                        <td>{__('EquipCount')}:</td>
-                        <td>{equipCount}/{common.equipMax}</td>
+                        <td>{__('TotalCount')}</td>
+                        <td>{common.battle.count}</td>
+                        <td>{common.practice.count}</td>
+                        <td>{common.mission.count}</td>
                     </tr>
                     <tr>
-                        <td>{__('Battle')}:</td>
-                        <td colSpan="3">{common.battle.win}/{common.battle.count}({(common.battle.win/common.battle.count*100).toFixed(1)}%)</td>
+                        <td>{__('SuccessRate')}</td>
+                        <td>{(common.battle.win/common.battle.count*100).toFixed(1)}%</td>
+                        <td>{(common.practice.win/common.practice.count*100).toFixed(1)}%</td>
+                        <td>{(common.mission.success/common.mission.count*100).toFixed(1)}%</td>
                     </tr>
+                </tbody>
+            </Table>
+
+            <h4><Label>{__('Materials')}:</Label></h4>
+            <Table condensed>
+                <tbody>
                     <tr>
-                        <td>{__('Practice')}:</td>
-                        <td colSpan="3">{common.practice.win}/{common.practice.count}({(common.practice.win/common.practice.count*100).toFixed(1)}%)</td>
-                    </tr>
-                    <tr>
-                        <td>{__('Mission')}:</td>
-                        <td colSpan="3">{common.mission.success}/{common.mission.count}({(common.mission.success/common.mission.count*100).toFixed(1)}%)</td>
-                    </tr>
-                    <tr>
-                        <td colSpan="4">{__('Materials')}:</td>
+                        <td colSpan="4"></td>
                     </tr>
                     <tr>
                         <td>
@@ -115,79 +154,7 @@ let StatisticArea = React.createClass({
                 </tbody>
             </Table>
 
-            <Table striped bordered condensed>
-                <caption>{__('Ships Statistics')}({__('Locked')})</caption>
-                <tbody>
-                    <tr>
-                        <td>{__('ShipCount')}</td>
-                        <td colSpan="3">{sShip.lockedCount}</td>
-                    </tr>
-                    <tr>
-                        <td>{__('AvgLevel')}</td>
-                        <td colSpan="3">{sShip.lockedAvgLv.toFixed(1)}</td>
-                    </tr>
-                    <tr>
-                        <td>{__('Max Level Ship')}</td>
-                        <td colSpan="3">{sShip.maxLvShip.name} ({sShip.maxLvShip.level})</td>
-                    </tr>
-                    <tr>
-                        <td colSpan="4">{__('Each ShipType Statistic')}</td>
-                    </tr>
-                    <tr>
-                        <td>{__('Type')}</td>
-                        <td>{__('ShipCount')}</td>
-                        <td>{__('AvgLevel')}</td>
-                        <td>{__('Max Level Ship')}</td>
-                    </tr>
-                    {
-                        sShip.types.map((item) => {
-                            return (<tr>
-                                <td>{item.name}</td>
-                                <td>{item.lockedCount}</td>
-                                <td>{item.lockedAvgLv.toFixed(1)}</td>
-                                <td>{item.maxLvShip.name} ({item.maxLvShip.level})</td>
-                            </tr>);
-                        })
-                    }
-                </tbody>
-            </Table>
-
-            <Table striped bordered condensed>
-                <caption>{__('Ships Statistics')}({__('MainForce')} lv.70+)</caption>
-                <tbody>
-                    <tr>
-                        <td>{__('ShipCount')}</td>
-                        <td colSpan="3">{sShip.forceCount}</td>
-                    </tr>
-                    <tr>
-                        <td>{__('AvgLevel')}</td>
-                        <td colSpan="3">{sShip.forceAvgLv.toFixed(1)}</td>
-                    </tr>
-                    <tr>
-                        <td>{__('Max Level Ship')}</td>
-                        <td colSpan="3">{sShip.maxLvShip.name} ({sShip.maxLvShip.level})</td>
-                    </tr>
-                    <tr>
-                        <td colSpan="4">{__('Each ShipType Statistic')}</td>
-                    </tr>
-                    <tr>
-                        <td>{__('Type')}</td>
-                        <td>{__('ShipCount')}</td>
-                        <td>{__('AvgLevel')}</td>
-                        <td>{__('Max Level Ship')}</td>
-                    </tr>
-                    {
-                        sShip.types.map((item) => {
-                            return (<tr>
-                                <td>{item.name}</td>
-                                <td>{item.forceCount}</td>
-                                <td>{item.forceAvgLv.toFixed(1)}</td>
-                                <td>{item.maxLvShip.name} ({item.maxLvShip.level})</td>
-                            </tr>);
-                        })
-                    }
-                </tbody>
-            </Table>
+            {sShips}
          </div>);
     }
 });

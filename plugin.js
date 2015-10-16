@@ -3,23 +3,19 @@ let ipc = require('ipc');
 
 let remote = require('remote');
 let windowManager = remote.require('./lib/window');
-
-let i18n = require('i18n');
 let path = require('path-extra');
-let __   = i18n.__;
 
 let React = window.React,
     FontAwesome = window.FontAwesome;
 
-i18n.configure({
-    'locales'      : ['en-US', 'ja-JP', 'zh-CN', 'zh-TW'],
-    'defaultLocale': 'zh-CN',
-    'directory'    : path.join(__dirname, 'i18n'),
-    'updateFiles'  : false,
-    'indent'       : '\t',
-    'extension'    : '.json'
-});
-i18n.setLocale(window.language);
+let getTitle = (language) => {
+    return ({
+        'zh-CN': '舰队快照',
+        'zh-TW': '艦隊存檔',
+        'en-US': 'Fleets Cached',
+        'js-JP': '艦隊キャッシュ'
+    })[language];
+};
 
 let SnapShotWindow = null;
 let boot = () => {
@@ -34,7 +30,9 @@ let boot = () => {
     SnapShotWindow.webContents.on('dom-ready', (e) => {
         SnapShotWindow.show();
     });
-    SnapShotWindow.openDevTools({ detach: true });
+    if(process.env.DEBUG) {
+        SnapShotWindow.openDevTools({ detach: true });
+    }
 };
 
 let materials = ['fuel', 'bullet','steel','bauxite',
@@ -103,12 +101,12 @@ let watchCommon = (e) => {
             break;
         case '/kcsapi/api_req_nyukyo/speedchange':
             if (body.api_result === 1) {
-                material[5] -= 1;
+                tempCommon.material[5] -= 1;
             }
             break;
         case '/kcsapi/api_req_nyukyo/start':
             if (body.api_highspeed === 1) {
-                material[5] -= 1;
+                tempCommon.material[5] -= 1;
             }
             break;
         default: break;
@@ -133,7 +131,7 @@ if (config.get('plugin.SnapShot.enable', true)) {
         if(!SnapShotWindow) { return; }
         let startInfo = {
             playerId: window._nickNameId,
-            language: window.config.get('poi.language', 'zhCN'),
+            language: window.config.get('poi.language', 'zh-CN'),
             theme   : window.config.get('poi.theme', '__default__')
         };
         SnapShotWindow.webContents.send('start-snapshot', startInfo);
@@ -145,10 +143,10 @@ module.exports = {
     'name'       : 'SnapShot',
     'priority'   : 50,
     'realClose'  : true,
-    'displayName': React.createElement('span', null, React.createElement(FontAwesome, { 'name': 'tags', 'key': 0. }), ' ' + __('Kantai Snapshot')),
+    'displayName': React.createElement('span', null, React.createElement(FontAwesome, { 'name': 'tags', 'key': 0. }), ' ' + getTitle(window.language)),
     'author'     : 'Lostpig',
     'link'       : 'https://github.com/Lostpig',
-    'version'    : '0.1.9',
+    'version'    : '0.1.12',
     'description': 'SnapShot',
     'handleClick': function() {
         boot();

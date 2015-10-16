@@ -12,9 +12,10 @@ window.FontAwesome    = require('../../node_modules/react-fontawesome');
 window.$  = (param) => { return document.querySelector(param); };
 window.$$ = (param) => { return document.querySelectorAll(param); };
 
-window.ROOT         = path.join(__dirname, '../..');
-window.EXROOT       = remote.getGlobal('EXROOT');
-window.APPDATA_PATH = remote.getGlobal('APPDATA_PATH');
+let remote       = window.remote,
+    ROOT         = window.ROOT         = path.join(__dirname, '../..'),
+    EXROOT       = window.EXROOT       = remote.getGlobal('EXROOT'),
+    APPDATA_PATH = window.APPDATA_PATH = remote.getGlobal('APPDATA_PATH');
 
 i18n.configure({
     locales      : ['en-US', 'ja-JP', 'zh-CN', 'zh-TW'],
@@ -32,7 +33,7 @@ let start = (event) => {
     window.language = startInfo.language;
     i18n.setLocale(window.language);
 
-    window.theme = startInfo.theme;
+    let theme = window.theme = startInfo.theme || '__default__';
     if (window.theme === '__default__') {
         $('#bootstrap-css').setAttribute('href', `file://${ROOT}/components/bootstrap/dist/css/bootstrap.css`);
     }

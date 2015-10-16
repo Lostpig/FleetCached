@@ -11,19 +11,20 @@ let React          = window.React,
 
 let __ = window.__;
 let util = require('../libs/util');
-let SnapshotShips = require('./ships'),
-    SnapshotEquips = require('./equips'),
-    StatisticsArea = require('./statistic');
+let SnapshotShips   = require('./ships'),
+    SnapshotEquips  = require('./equips'),
+    StatisticsArea  = require('./statistic'),
+    SnapshotCompare = require('./compare');
 
 let formatRecord = (timeStr) => {
     if(timeStr === 'now') { return __('Now'); }
     else {
         let time = new Date(parseInt(timeStr));
-        return `${time.getFullYear()}-${time.getMonth()+1}-${time.getDate()} ${time.getHours()}:${time.getMinutes()}`;
+        return util.formatTime(time);
     }
 };
 
-let nowRecord = {};
+window.nowRecord = {};
 let SnapShot = React.createClass({
     getInitialState: function() {
         return {
@@ -42,7 +43,7 @@ let SnapShot = React.createClass({
         if (key !== self.state.selectRecord) {
             self.setState({'selectRecord': key});
             if (key === 'now') {
-                self.setState({'data': nowRecord});
+                self.setState({'data': window.nowRecord});
             }
             else {
                 util.load(window.playerId, key)
@@ -71,14 +72,14 @@ let SnapShot = React.createClass({
         util.getNow();
     },
     handleLoaded: function(event) {
-        nowRecord = event.detail.data;
+        window.nowRecord = event.detail.data;
         if (this.state.selectRecord === 'now') {
-            this.setState({'data': nowRecord});
+            this.setState({'data': window.nowRecord});
         }
     },
     handleSave: function(event) {
         let self = this;
-        util.save(window.playerId, nowRecord)
+        util.save(window.playerId, window.nowRecord)
             .then((filename) => {
                 console.log(`${filename} save success`);
                 self.handleScan();
@@ -122,6 +123,9 @@ let SnapShot = React.createClass({
                     </TabPane>
                     <TabPane key={'statistics'} eventKey={3} tab={__('Statistics')} id={'Statistics'} className='poi-app-tabpane'>
                         <StatisticsArea data={this.state.data || null} />
+                    </TabPane>
+                    <TabPane key={'compare'} eventKey={4} tab={__('Compare')} id={'Compare'} className='poi-app-tabpane'>
+                        <SnapshotCompare list={this.state.records || null} />
                     </TabPane>
                 </TabbedArea>
             </div>

@@ -8,6 +8,7 @@
     "Ships": "Ships",
     "Equips": "Equips",
     "Statistics": "Statistics",
+    "Compare": "Compare",
 
     "Equips Info": "Equips Info",
     "No": "No",
@@ -20,6 +21,7 @@
 
     "Ships Info": "Ships Info",
     "Level": "Level",
+    "SType": "Ship Type",
     "Health": "Health",
     "Fire": "Fire",
     "Torpedo": "Torpedo",
@@ -42,5 +44,15 @@
     "Each ShipType Statistic": "Each ShipType Statistic",
     "MainForce": "Main Force",
 
-    "No data available": "No data available"
+    "SuccessCount": "Success Count",
+    "TatalCount": "Total Count",
+    "SuccessRate": "Success Rate",
+
+    "Please Select Compare Records": "Please Select Compare Records",
+    "Tetokun Name": "Tetokun Name",
+    "PerDay": "Per Day",
+    "Date": "Date",
+
+    "No data available": "No data available",
+    "Loading": "Loading"
 }

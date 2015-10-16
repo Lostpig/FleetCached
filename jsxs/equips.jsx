@@ -11,15 +11,14 @@ let EquipRow = React.createClass({
             starText = [];
         for(let i = 1; i < equip.star.length; i++) {
             if(equip.star[i] > 0) {
-                starText.push(<span className="equip-star">{i}★ × {equip.star[i]}</span>);
+                starText.push(<span key={i} className="equip-star">{i}★ × {equip.star[i]}</span>);
             }
         }
         return (
             <tr>
                 <td>{this.props.index}</td>
                 <td>{equip.id}</td>
-                <td>{equip.name}</td>
-                <td>{equip.type}</td>
+                <td><img src={`file://${ROOT}/assets/img/slotitem/${equip.type + 100}.png`} />{equip.name}</td>
                 <td>{equip.count}</td>
                 <td>{starText}</td>
             </tr>
@@ -29,26 +28,25 @@ let EquipRow = React.createClass({
 
 let SnapshotEquips = React.createClass({
     render: function() {
-        let equips = this.props.data,
-            rows = [];
+        let equips = this.props.data;
         if (equips === null) {
             return (<div className="nodata-alert">{__('No data available')}</div>);
         }
 
-        for(let i = 0; i < equips.length; i++) {
-            let equip = equips[i];
-            rows.push(<EquipRow key={i+1} equip={equip} index={i+1} />);
-        }
+        let rows = equips.sort((a,b) => a.type - b.type)
+            .map((item, index) => {
+                return (<EquipRow key={index+1} equip={item} index={index+1} />);
+            });
+        
         return (
             <div class="snapshot-ships">
-                <Table striped bordered condensed>
+                <Table striped condensed>
                     <caption>{__('Equips Info')}</caption>
                     <thead>
                         <tr>
                             <th>{__('NO')}</th>
                             <th>{__('ID')}</th>
                             <th>{__('Name')}</th>
-                            <th>{__('Type')}</th>
                             <th>{__('Count')}</th>
                             <th>{__('Star')}</th>
                         </tr>

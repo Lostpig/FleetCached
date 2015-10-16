@@ -23,11 +23,11 @@
         "regexYFlag": false,
 
         "superInFunctions": false,
-        "objectLiteralComputedProperties": false,
-        "objectLiteralShorthandMethods": false,
-        "objectLiteralShorthandProperties": false,
+        "objectLiteralComputedProperties": true,
+        "objectLiteralShorthandMethods": true,
+        "objectLiteralShorthandProperties": true,
 
-        "objectLiteralDuplicateProperties": false,
+        "objectLiteralDuplicateProperties": true,
         "globalReturn": false,
 
         "jsx": true
