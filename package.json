@@ -1,7 +1,7 @@
 {
     "name": "snapshot",
-    "version": "0.1.12",
-    "description": "save ships status snapshhot",
+    "version": "0.1.13",
+    "description": "save ships status snapshot",
     "main": "plugin.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",

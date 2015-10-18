@@ -146,7 +146,7 @@ module.exports = {
     'displayName': React.createElement('span', null, React.createElement(FontAwesome, { 'name': 'tags', 'key': 0. }), ' ' + getTitle(window.language)),
     'author'     : 'Lostpig',
     'link'       : 'https://github.com/Lostpig',
-    'version'    : '0.1.12',
+    'version'    : '0.1.13',
     'description': 'SnapShot',
     'handleClick': function() {
         boot();

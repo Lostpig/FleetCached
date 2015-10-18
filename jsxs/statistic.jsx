@@ -42,7 +42,7 @@ let ShipStatisticArea = React.createClass({
                                 <td>{item.Name}</td>
                                 <td>{item.Count}</td>
                                 <td>{item.AvgLevel.toFixed(1)}</td>
-                                <td>{item.maxLvShip ? `${item.maxLvShip.name} (${item.maxLvShip.level})` : ''})</td>
+                                <td>{item.maxLvShip ? `${item.maxLvShip.name} (${item.maxLvShip.level})` : ''}</td>
                             </tr>);
                         })
                     }
@@ -77,7 +77,7 @@ let StatisticArea = React.createClass({
                 <ListGroupItem>{__('EquipCount') + ': ' + equipCount + ' / ' + common.equipMax}</ListGroupItem>
             </ListGroup>
 
-            <h4><Label>{__('Dispatch')}:</Label></h4>
+            <h4><Label>{__('Military Exploits')}:</Label></h4>
             <Table condensed>
                 <thead>
                     <tr>

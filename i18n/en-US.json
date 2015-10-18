@@ -38,20 +38,30 @@
     "Mission": "Mission",
     "Materials": "Materials",
     "Ships Statistics": "Ships Statistics",
-    "Locked": "Locked",
     "AvgLevel": "Avg Level",
     "Max Level Ship": "Max Level Ship",
     "Each ShipType Statistic": "Each ShipType Statistic",
     "MainForce": "Main Force",
 
     "SuccessCount": "Success Count",
-    "TatalCount": "Total Count",
+    "TotalCount": "Total Count",
     "SuccessRate": "Success Rate",
+
+    "Overall": "Overall",
+    "DD": "DD",
+    "CL": "CL & CLT",
+    "CA": "CA & CAV",
+    "BB": "BB & BBV",
+    "CV": "CV & CVB & CVL",
+    "SS": "SS & SSV",
+    "Other": "Other",
 
     "Please Select Compare Records": "Please Select Compare Records",
     "Tetokun Name": "Tetokun Name",
     "PerDay": "Per Day",
     "Date": "Date",
+    "days": "days",
+    "Military Exploits": "Military Exploits",
 
     "No data available": "No data available",
     "Loading": "Loading"

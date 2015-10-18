@@ -62,13 +62,14 @@ DispatchCompare = React.createClass({
             rData = this.props.rightdata.common;
 
         let tables = ['battle', 'practice', 'mission'].map((item) => {
-            let win = item === 'mission' ? 'success' : 'win';
+            let win = item === 'mission' ? 'success' : 'win',
+                _item = item[0].toUpperCase() + item.slice(1);
             return (
-                <Table key={item} condensed className="compare-s6">
-                    <ColumnsGroup length={6} />
+                <Table key={item} condensed className="compare-s5">
+                    <ColumnsGroup length={5} />
+                    <caption><h5><Label>{__(_item)}</Label></h5></caption>
                     <tbody>
                         <tr>
-                            <td rowSpan="4">{__(item)}</td>
                             <td>{__('SuccessCount')}</td>
                             <td>{lData[item][win]}</td>
                             <td><FontAwesome name='arrow-right' /></td>
@@ -99,7 +100,7 @@ DispatchCompare = React.createClass({
         });
 
         return (
-            <Panel collapsible defaultExpanded header={<Label className="snapshot-sstitle">{__('Dispatch')}</Label>}>
+            <Panel collapsible defaultExpanded header={<Label className="snapshot-sstitle">{__('Military Exploits')}</Label>}>
                 {tables}
             </Panel>
         );
@@ -115,6 +116,7 @@ ShipCompare = React.createClass({
             <Panel collapsible defaultExpanded header={<Label className="snapshot-sstitle">{__('Ships Statistics') + ` (${condition.title})`}</Label>}>
                 <Table condensed className="compare-s5">
                     <ColumnsGroup length={5} />
+                    <caption><h5><Label>{__('Overall')}</Label></h5></caption>
                     <tbody>
                         <tr>
                             <td>{__('ShipCount')}</td>
@@ -139,18 +141,17 @@ ShipCompare = React.createClass({
                         </tr>
                     </tbody>
                 </Table>
-                <h5><Label>{__('Each ShipType Statistic')}</Label></h5>
                 {
                     stypes.map((stype) => {
                         let lType = lShip.Ctypes.find((item) => item.Id === stype.id),
                             rType = rShip.Ctypes.find((item) => item.Id === stype.id);
 
                         return (
-                            <Table key={stype.id} condensed className="compare-s6">
-                                <ColumnsGroup length={6} />
+                            <Table key={stype.id} condensed className="compare-s5">
+                                <ColumnsGroup length={5} />
+                                <caption><h5><Label>{__(stype.name)}</Label></h5></caption>
                                 <tbody>
                                     <tr>
-                                        <td rowSpan="3">{__(stype.name)}</td>
                                         <td>{__('ShipCount')}</td>
                                         <td>{lType.Count}</td>
                                         <td><FontAwesome name='arrow-right' /></td>
@@ -224,8 +225,11 @@ CompareArea = React.createClass({
             </Table>
 
             <DispatchCompare leftdata={lData} rightdata={rData} />
-            <ShipCompare leftdata={lData} rightdata={rData} condition={shipFilterCondition[0]} />
-            <ShipCompare leftdata={lData} rightdata={rData} condition={shipFilterCondition[1]} />
+            {
+                shipFilterCondition.map((item) => {
+                    return (<ShipCompare leftdata={lData} rightdata={rData} condition={item} />)
+                })
+            }
         </div>);
     }
 });

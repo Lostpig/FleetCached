@@ -8,6 +8,7 @@
     "Ships": "舰娘",
     "Equips": "装备",
     "Statistics": "统计",
+    "Compare": "对比",
 
     "Equips Info": "装备信息",
     "No": "编号",
@@ -21,13 +22,14 @@
     "Ships Info": "舰娘信息",
     "Level": "等级",
     "Health": "生命值",
+    "SType": "舰种",
     "Fire": "火力",
     "Torpedo": "雷装",
     "Antiair": "对空",
     "Armor": "装甲",
     "Luck": "幸运",
     "Locked": "已上锁",
-    
+
     "Teitokun Common Info": "镇守府基础数据",
     "ShipCount": "舰娘数量",
     "EquipCount": "装备数量",
@@ -41,5 +43,26 @@
     "Each ShipType Statistic": "各舰种练度统计",
     "MainForce": "主力",
 
-    "No data available": "暂无数据"
+    "SuccessCount": "成功次数",
+    "TotalCount": "总次数",
+    "SuccessRate": "成功率",
+
+    "Overall": "总体",
+    "DD": "驱逐",
+    "CL": "轻巡 & 雷巡",
+    "CA": "重巡 & 航巡",
+    "BB": "战舰 & 航战",
+    "CV": "空母 & 装母 & 轻空母",
+    "SS": "潜艇 & 潜母",
+    "Other": "其它",
+
+    "Please Select Compare Records": "请选择要对比的记录",
+    "Tetokun Name": "提督姓名",
+    "PerDay": "日均",
+    "Date": "日期",
+    "days": "日",
+    "Military Exploits": "战绩",
+
+    "No data available": "暂无数据",
+    "Loading": "读取中"
 }
