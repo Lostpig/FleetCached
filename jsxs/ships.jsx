@@ -48,7 +48,7 @@ let
             }
 
             return (<div>
-                <Panel collapsible defaultExpanded header={(<span>{ctype + ' ' + __('Ships Info')} <Label>{ships.length}</Label></span>)}>
+                <Panel collapsible defaultExpanded header={(<span>{__(ctype) + ' '} <Label>{ships.length}</Label></span>)}>
                     <Table striped condensed className="snapshot-shiptable">
                         <thead>
                             <tr>

@@ -8,6 +8,7 @@ let React          = window.React,
     Label          = ReactBootstrap.Label,
     Panel          = ReactBootstrap.Panel;
 
+let powerComputer = require('../libs/powercomputer');
 let shipStatistic = require('../libs/shipStatistic');
 let shipFilterCondition = shipStatistic.FilterCondition,
     getShipsStatistic = shipStatistic.getShipsStatistic;
@@ -39,7 +40,7 @@ let ShipStatisticArea = React.createClass({
                     {
                         sShip.Ctypes.map((item) => {
                             return (<tr key={item.Id}>
-                                <td>{item.Name}</td>
+                                <td>{__(item.Name)}</td>
                                 <td>{item.Count}</td>
                                 <td>{item.AvgLevel.toFixed(1)}</td>
                                 <td>{item.maxLvShip ? `${item.maxLvShip.name} (${item.maxLvShip.level})` : ''}</td>
@@ -68,6 +69,7 @@ let StatisticArea = React.createClass({
             let data = getShipsStatistic(this.props.data.ship, item.filter);
             return (<ShipStatisticArea key={index + 1} data={data} title={item.title} />);
         });
+        let powers = powerComputer.FleetPower(this.props.data.ship);
 
         return (<div className="snapshot-statisticarea">
             <h4><Label>{__('Teitokun Common Info')}</Label></h4>
@@ -150,6 +152,24 @@ let StatisticArea = React.createClass({
                             <img src={`file://${ROOT}/assets/img/material/08.png`} />
                             <span>{common.material.remodel}</span>
                         </td>
+                    </tr>
+                </tbody>
+            </Table>
+
+            <h4><Label>{__('Powers')}:</Label></h4>
+            <Table condensed>
+                <tbody>
+                    {
+                        powers.map((power) => {
+                            return(<tr>
+                                <td>{power.ctype.name}</td>
+                                <td>{power.score}</td>
+                            </tr>);
+                        })
+                    }
+                    <tr>
+                        <td>Sum</td>
+                        <td>{powers.sum(p => p.score)}</td>
                     </tr>
                 </tbody>
             </Table>

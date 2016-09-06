@@ -227,7 +227,7 @@ CompareArea = React.createClass({
             <DispatchCompare leftdata={lData} rightdata={rData} />
             {
                 shipFilterCondition.map((item) => {
-                    return (<ShipCompare leftdata={lData} rightdata={rData} condition={item} />)
+                    return (<ShipCompare leftdata={lData} rightdata={rData} condition={item} />);
                 })
             }
         </div>);

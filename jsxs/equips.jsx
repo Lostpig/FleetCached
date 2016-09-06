@@ -37,7 +37,7 @@ let SnapshotEquips = React.createClass({
             .map((item, index) => {
                 return (<EquipRow key={index+1} equip={item} index={index+1} />);
             });
-        
+
         return (
             <div class="snapshot-ships">
                 <Table striped condensed>
@@ -48,7 +48,7 @@ let SnapshotEquips = React.createClass({
                             <th>{__('ID')}</th>
                             <th>{__('Name')}</th>
                             <th>{__('Count')}</th>
-                            <th>{__('Star')}</th>
+                            <th>{__('Stars')}</th>
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>
